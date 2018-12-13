@@ -5,7 +5,7 @@
 {% block title %}Index{% endblock title %}
 {% block content %}
     <div id="top">
-        <img src="static/images/FuzenInfo_favicon.ico" class="circle_image" />
+        <img src="static/images/FuzenInfo.png" class="circle_image" />
         <span class="line"></span>
     </div>
     <p class="hack">Fuzen</p>

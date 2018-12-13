@@ -19,18 +19,11 @@ mod fuzen_cafe;
 mod fuzen_info;
 mod hosts;
 mod statics;
-
-fn log(app: actix_web::App) -> actix_web::App {
-    app.middleware(actix_web::middleware::Logger::new(
-        "%{HOST}i: %a \"%r\" %s %b \"%{Referer}i\" \"%{User-Agent}i\" %D",
-    ))
-}
-
 fn main() {
     pretty_env_logger::init();
     let addr: String =
         std::env::var("WEB_LISTEN_ADDR").unwrap_or_else(|_| String::from("127.0.0.1:8080"));
-    server::new(|| vec![log(fuzen_info::route()), log(fuzen_cafe::route())])
+    server::new(|| vec![fuzen_cafe::route(), fuzen_info::route()])
         .bind(addr)
         .unwrap()
         .run()

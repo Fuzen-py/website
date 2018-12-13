@@ -37,4 +37,7 @@ pub fn route() -> ::actix_web::App {
                 .resource("/{name}", |r| r.method(http::Method::GET).with(fun::baka))
         })
         .resource("/favicon.ico", |r| r.f(favicon))
+        .middleware(::actix_web::middleware::Logger::new(
+            "%a \"%r\" %s %b \"%{Referer}i\" \"%{User-Agent}i\" %D",
+        ))
 }

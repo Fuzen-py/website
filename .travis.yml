@@ -1,2 +1,2 @@
 language: nix
-script: nix-shell --pure --run "cargo build --release"
+script: nix-shell --pure --run "cargo test"

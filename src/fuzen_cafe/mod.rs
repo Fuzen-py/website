@@ -15,13 +15,17 @@ lazy_static! {
 }
 
 pub fn route() -> ::actix_web::App {
-    crate::hosts::Hosts::FuzenInfo
+    crate::hosts::Hosts::FuzenCafe
         .filter(::actix_web::App::new())
         .resource("/", |r| r.f(index))
         .resource("/demos", |r| r.f(demos))
         .resource("/projects", |r| r.f(projects))
         .resource("/favicon.ico", |r| r.f(favicon))
         .resource("/static/style.css", |r| r.f(css))
+        .resource("/static/images/FuzenInfo.png", |r| r.f(img))
+        .middleware(::actix_web::middleware::Logger::new(
+            "%a \"%r\" %s %b \"%{Referer}i\" \"%{User-Agent}i\" %D",
+        ))
 }
 
 fn index(_: &HttpRequest) -> Result<HttpResponse> {
@@ -68,4 +72,12 @@ fn css(_req: &HttpRequest) -> HttpResponse {
     HttpResponse::Ok()
         .content_type("text/css")
         .body(crate::statics::STYLE_SHEET)
+}
+
+fn img(_req: &HttpRequest) -> HttpResponse {
+    HttpResponse::Ok()
+        .content_type("image/png")
+        .body(actix_web::Binary::Slice(
+            crate::statics::images::FUZEN_INFO_FAVICON,
+        ))
 }
