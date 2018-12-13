@@ -1,0 +1,37 @@
+{% extends "base" %}
+{% block js %}
+<script type="text/javascript" src="/static/scripts/index.js"></script>
+{% endblock js %}
+{% block title %}Index{% endblock title %}
+{% block content %}
+    <div id="top">
+        <img src="static/images/FuzenInfo_favicon.ico" class="circle_image" />
+        <span class="line"></span>
+    </div>
+    <p class="hack">Fuzen</p>
+    <h2 class="hack">About</h2>
+    <div style="text-align: center; font-size: 14px;" class="hack">
+        <p>A Software developer from the northern hemisphere, I have an interest in system's level programming languages.</p>
+        <p>I started off as a python developer when i was about the age of 7 when I was looking for a way to automate my homework.</p>
+        <p>I kept with python development till 2017 where I decided to learn something new. I picked rust and it has become one of my favorite languages.</p>
+    </div>
+    <div class="info hack">
+        <h2 class="hack">Blog</h2>
+    </div>
+    <div class="hack projects">
+    {% for post in blog %}
+    <a href="/blog/{{ post.uuid }}" id="post_{{ post.num }}" class="hidden">
+    <span class="struct_name">Blog</span>
+    <span class="struct_bracket">{</span>
+    <span class="struct_attr">title</span><span class="struct_attr_sep">:</span>
+    <span class="struct_attr_string">"{{post.title}}"</span><span class="struct_attr_sep">,</span>
+    <span class="struct_attr">published</span><span class="struct_attr_sep">:</span>
+    <span class="struct_attr_string">"{{ post.published | date(format="%Y-%m-%d %H:%M") }}"</span><span class="struct_attr_sep">,</span>
+    <span class="struct_attr">updated</span><span class="struct_attr_sep">:</sep>
+    <span class="struct_attr_string">"{{ post.updated | date(format="%Y-%m-%d %H:%M") }}"</span>
+    <span class="struct_bracket">}</span>
+    </a>
+    {% endfor %}
+    <div id="more" class="hack">MORE</div>
+    </div>
+{% endblock content %}

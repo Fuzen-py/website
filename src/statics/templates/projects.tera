@@ -1,0 +1,35 @@
+{% extends "base" %}
+{% block title %}Projects{% endblock title %}
+{% block content %}
+
+
+    <div class="hack projects">
+        <div>
+            <a href="https://github.com/Fuzen-py/fuzen.info"><span class="rust">fuzen.info</span></a>
+            <p>About: A simple API in rust using Rocket-rs</p>
+            <p>Technologies: Rocket-rs</p>
+            <p>Status: Ongoing Development</p>
+        </div>
+        <br/>
+        <div>
+            <a href="https://github.com/Mikibot/GameService" class="hack"><span class="rust">GameService</span></a>
+            <p>About: A Game API intended to only be accessed by an app running on the server</p>
+            <p>Technologies: Rocket-rs Diesel-rs Serde</p>
+            <p>Status: Ongoing Development</p>
+        </div>
+        <br/>
+        <div>
+            <a href="https://github.com/Fuzen-py/Coinbase-rs" class="hack"><span class="rust">CoinBase-rs</span></a>
+            <p>About: A library for interacting with CoinBase's api</p>
+            <p>Technologies: Serde, Rewquest, Hyper</p>
+            <p>Status: InProgress (early stages)</p>
+        </div>
+        <br/>
+        <div>
+            <a href="https://github.com/Fuzen-py/BladeAndSoulAPI" class="hack"><span class="python">[Deprecated] BladeAndSoulAPI</span></a>
+            <p>A Python library to gather information from blade and soul </p>
+            <p>Technologies: Aiohttp, BeautifulSoup4</p>
+            <p>Status: Dropped (Feb, 2017) </p>
+        </div>
+    </div>
+{% endblock content %}

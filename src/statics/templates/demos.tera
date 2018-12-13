@@ -1,0 +1,16 @@
+{% extends "base" %}
+{% block title %}Demos{% endblock title %}
+{% block content %}
+    <div class="hack projects">
+        {% for demo in demos %}
+            <div>
+                <a href="{{ demo.link }}"> {{ demo.name }}</a>
+                <p>{{ demo.description }}</p>
+                {% if demo.src %}
+                    <a href="{{ demo.src }}">SRC</a>
+                {% endif %}
+            </div>
+            <br/>
+        {% endfor %}
+    </div>
+{% endblock content %}

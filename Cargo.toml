@@ -15,4 +15,7 @@ rayon = "1.0.3"
 rand = "0.6.1"
 num = "0.2.0"
 image = "0.20.1"
-tera = "0.11"
+tera = "0.11.20"
+lazy_static = "1.2.0"
+pretty_env_logger = "0.3.0"
+chrono = { version = "0.4.6", features = ["serde"] }

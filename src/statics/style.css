@@ -1,0 +1,116 @@
+body {
+    background-color: #1d2021;
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    margin-top: 20px;
+    align-items:center;
+    color: #ebdbb2;
+  }
+  .content {
+    position:relative;
+    width: 90vw;
+    background-color: #3C3836;
+    border: solid 2px;
+    border-color: #d65d0e;
+    padding: 1%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #top {
+    position:relative;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    height: 10%;
+    top: 8px;
+  }
+  .circle_image {
+    width: 10%;
+    background-color: #f1f1f1;
+    border-radius: 100%;
+    position: relative;
+    z-index: 10;
+  }
+  .line {
+    position: absolute;
+    width: 90%;
+    height: 2px;
+    background-color: #cc2f1d;
+    z-index: 1;
+  }
+  .info {
+    width: 80%;
+    text-align: center;
+  }
+  .hack {font-family: Hack, monospace; font-size: 24px;}
+  
+  .python:before {font-family: "devicons"; content: "\e63c"; font-size: 30px; margin-left: 10px;}
+  .rust:before {font-family: "devicons"; content: "\e6a8"; font-size: 30px; padding-left: 10px;}
+  .java:before {font-family: "devicons"; content: "\e638"; font-size: 30px; padding-left: 10px;}
+  .javascript:before {font-family: "devicons"; content: "\e64e"; font-size: 30px; padding-left: 10px;}
+  .nodejs:before {font-family: "devicons"; content: "\e618"; font-size: 30px; padding-left: 10px;}
+  
+  a {
+    color: #ebdbb2;
+    text-decoration: none;
+  }
+  .projects > div > a:hover::after {
+    font-family: "devicons";
+    content: "\e629";
+    margin-left: 10px;
+  }
+  
+  .projects> {padding: 1px 0px 1px 0px; list-style: none; margin: 0px;}
+  .projects {display: block}
+  .projects > a {display: block; padding: 2px 0px 2px 0px;}
+  /*
+    vim: set ts=2 sw=2 tw=2 et :
+    vim: foldmethod=syntax :
+  */
+  .projects > div {
+    background-color: #282828;
+    border: solid 2px #1d2021;
+    color: #fbf1c7;
+    border-radius: 1%;
+    padding: 20px;
+  }
+  
+  .nav {
+    padding-top: 1%;
+    font-family: "devicons";
+  }
+
+  .struct_name {
+    color: #d79921;
+  }
+  .struct_attr_sep {
+    color: #928374;
+  }
+  .struct_attr_string {
+    color: #d65d0e;
+  }
+  .struct_bracket {
+    color: #b8bb26;
+  }
+  .struct_attr {
+    color: #83a598;
+  }
+
+  #more {
+    color: #b16286;
+    text-align: center;
+    padding: 5px;
+    margin: 0;
+    border: none;
+    display: inherit;
+    background-color: #3C3836;
+    
+  }
+/*
+  .hidden {
+    display: none !important;
+  }
+*/

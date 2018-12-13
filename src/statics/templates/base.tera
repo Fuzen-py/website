@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/font-hack/2.020/css/hack-extended.min.css" />
+    <link href='https://cdn.jsdelivr.net/devicons/1.8.0/css/devicons.min.css' rel='stylesheet' />
+    <title>{% block title %}{% endblock title %} - Fuzen Cafe</title>
+    {% endblock head %}
+</head>
+<body>
+    <div class="content">{% block content %}{% endblock content %}</div>
+    <div class="nav">
+        <a href="mailto:fuzen@protonmail.com">&#xe635; Contact</a>
+        <span> | </span>
+        <a href="https://github.com/Fuzen-py">&#xe608; Github</a>
+    </div>
+</body>
+</html>
