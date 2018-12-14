@@ -141,5 +141,5 @@ pub fn fractal_png(_req: &::actix_web::HttpRequest) -> Result<::actix_web::HttpR
 #[test]
 fn sync_iter() {
     let v: Vec<u8> = FractalCore::sync(700, 700).collect();
-    assert_eq!(v.len(), 490000usize);
+    assert_eq!(v.len(), 490_000usize);
 }

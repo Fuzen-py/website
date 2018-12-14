@@ -1,11 +1,9 @@
 mod fractal;
 mod fun;
+mod help;
 mod randomword;
 mod totp;
 use actix_web::{http, HttpRequest, HttpResponse};
-fn index(_req: &HttpRequest) -> &'static str {
-    "Hello World!"
-}
 
 fn favicon(_req: &HttpRequest) -> HttpResponse {
     HttpResponse::Ok()
@@ -18,9 +16,9 @@ fn favicon(_req: &HttpRequest) -> HttpResponse {
 pub fn route() -> ::actix_web::App {
     crate::hosts::Hosts::FuzenInfo
         .filter(::actix_web::App::new())
-        .resource("/", |r| r.f(index))
+        .resource("/", |r| r.method(http::Method::GET).with(help::help))
         .resource("/totp", |r| r.method(http::Method::GET).with(totp::totp))
-        .resource("/randword", |r| {
+        .resource("/randomword", |r| {
             r.method(http::Method::GET).with(randomword::randomword)
         })
         .resource("/fractal.png", |r| r.f(fractal::fractal_png))
@@ -37,7 +35,11 @@ pub fn route() -> ::actix_web::App {
                 .resource("/{name}", |r| r.method(http::Method::GET).with(fun::baka))
         })
         .resource("/favicon.ico", |r| r.f(favicon))
-        .middleware(::actix_web::middleware::Logger::new(
-            "%a \"%r\" %s %b \"%{Referer}i\" \"%{User-Agent}i\" %D",
-        ))
+        .scope("/help", |scope| {
+            scope
+                .resource("", |r| r.method(http::Method::GET).with(help::help))
+                .resource("/", |r| r.method(http::Method::GET).with(help::help))
+                .resource("/{route}", |r| r.method(http::Method::GET).with(help::help))
+        })
+        .middleware(actix_web::middleware::cors::Cors::default())
 }

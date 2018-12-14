@@ -15,6 +15,7 @@ pub enum HostError {
 impl Hosts {
     pub fn filter(self, app: actix_web::App) -> actix_web::App {
         app.filter(self.create_pred())
+            .middleware(::actix_web::middleware::Logger::default())
     }
     pub fn create_pred<S: 'static>(self) -> pred::AnyPredicate<S> {
         match self {

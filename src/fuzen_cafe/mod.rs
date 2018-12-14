@@ -23,9 +23,6 @@ pub fn route() -> ::actix_web::App {
         .resource("/favicon.ico", |r| r.f(favicon))
         .resource("/static/style.css", |r| r.f(css))
         .resource("/static/images/FuzenInfo.png", |r| r.f(img))
-        .middleware(::actix_web::middleware::Logger::new(
-            "%a \"%r\" %s %b \"%{Referer}i\" \"%{User-Agent}i\" %D",
-        ))
 }
 
 fn index(_: &HttpRequest) -> Result<HttpResponse> {
