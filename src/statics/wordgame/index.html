@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/static/wordgame/main.css">
+    <title>Word Game</title>
+</head>
+
+<body>
+    <div id="instructions">
+        <span>To reset press </span><span class="key">`</span>
+        <br>
+        <span>Press the letters on your keyboard to guess the word</span>
+        <br>
+        <span>High Score: </span><span id="high_score">0</span>
+    </div>
+    <div id="dynamic">
+        <span id="word_line"></span>
+        <span id="remaining"></span>
+
+    </div>
+    <div>Attempts: <span id="guesses"></span></div>
+    <script src="/static/wordgame/main.js"></script>
+</body>
+
+</html>

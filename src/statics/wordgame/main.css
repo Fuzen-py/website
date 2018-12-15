@@ -1,0 +1,27 @@
+body {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+#instructions {
+    font-size: 20px;
+}
+
+#dynamic {
+    display: flex;
+    padding-top: 30%;
+    padding-left: 40%;
+    font-size: 40px;
+    color: #FFF;
+}
+
+.key {
+    background-color: #d3d3d3;
+    color: #000;
+    border: 2px solid #A9A9A9;
+    padding: 0px 8px 0px 8px;
+}
+
+#remaining {
+    padding-left: 3%
+}

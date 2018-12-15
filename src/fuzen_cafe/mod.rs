@@ -23,6 +23,9 @@ pub fn route() -> ::actix_web::App {
         .resource("/favicon.ico", |r| r.f(favicon))
         .resource("/static/style.css", |r| r.f(css))
         .resource("/static/images/FuzenInfo.png", |r| r.f(img))
+        .resource("/wordgame", |r| r.f(wordgame_main))
+        .resource("/static/wordgame/main.css", |r| r.f(wordgame_css))
+        .resource("/static/wordgame/main.js", |r| r.f(wordgame_js))
 }
 
 fn index(_: &HttpRequest) -> Result<HttpResponse> {
@@ -31,6 +34,24 @@ fn index(_: &HttpRequest) -> Result<HttpResponse> {
     TERA.render("index", &context)
         .and_then(|result| Ok(HttpResponse::Ok().content_type("text/html").body(result)))
         .map_err(|_| actix_web::error::ErrorNotFound("Render failed"))
+}
+
+fn wordgame_main(_: &HttpRequest) -> HttpResponse {
+    HttpResponse::Ok()
+        .content_type("text/html")
+        .body(crate::statics::wordgame::INDEX_HTML)
+}
+
+fn wordgame_css(_: &HttpRequest) -> HttpResponse {
+    HttpResponse::Ok()
+        .content_type("text/css")
+        .body(crate::statics::wordgame::MAIN_CSS)
+}
+
+fn wordgame_js(_: &HttpRequest) -> HttpResponse {
+    HttpResponse::Ok()
+        .content_type("text/javascript")
+        .body(crate::statics::wordgame::MAIN_JS)
 }
 
 fn demos(_: &HttpRequest) -> Result<HttpResponse> {
