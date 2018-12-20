@@ -1,8 +1,0 @@
-TOTP Code Generator
-/totp : Generate a TOTP Code
-[Arguments]
-?key=<key>: [Required] Base32key for generating code
-?period=<int=30> : Change the period, default 30
-?initial_time=<int=0> : Change the initial time, default 0
-?base=<list of u8 values=[48, 49, 50, 51, 52, 53, 54, 55, 56, 57]> : Change the base, default is base 10
-?length=<int=6> = Length of code to return (Base effects the max)
