@@ -3,7 +3,7 @@ use rayon::prelude::*;
 static RAND_WORDS: &str = include_str!("words.txt");
 
 #[derive(Deserialize, Copy, Clone)]
-pub struct RandomWord {
+pub struct RandomWordQuery {
     #[serde(default)]
     min: usize,
     #[serde(default)]
@@ -18,8 +18,8 @@ fn default_count() -> usize {
     1
 }
 
-impl RandomWord {
-    pub fn gen(self) -> Vec<String> {
+impl RandomWordQuery {
+    fn inner_gen(self) -> Vec<String> {
         RAND_WORDS
             .par_lines()
             .filter(|word| {
@@ -40,8 +40,24 @@ impl RandomWord {
             .map(|l| l.to_string())
             .collect()
     }
+    fn gen(self) -> RandomWord {
+        RandomWord {
+            words: self.inner_gen(),
+        }
+    }
 }
 
-pub fn randomword(query: ::actix_web::Query<RandomWord>) -> String {
-    query.into_inner().gen().join("\n")
+#[derive(Serialize)]
+struct RandomWord {
+    words: Vec<String>,
+}
+
+impl std::fmt::Display for RandomWord {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        f.write_str(&self.words.join("\n"))
+    }
+}
+
+pub fn randomword(query: ::actix_web::Query<RandomWordQuery>) -> String {
+    query.into_inner().gen().to_string()
 }

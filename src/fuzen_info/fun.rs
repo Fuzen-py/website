@@ -2,28 +2,45 @@ use actix_web::{Path, Result};
 
 #[derive(Deserialize)]
 pub struct Info {
-    #[serde(default)]
     name: String,
 }
+#[derive(Serialize)]
+pub struct Hello {
+    pub name: String,
+}
 
-//Rust > 1.31 #[allow(clippy::needless_pass_by_value)]
-pub fn hello(info: Path<Info>) -> Result<String> {
-    if info.name.is_empty() {
-        Ok(String::from(
-            "Usage: /hello/<name>\nExample: /hello/world - Hello, World! 👋",
-        ))
-    } else {
-        Ok(format!("Hello, {}! 👋", info.name))
+impl std::fmt::Display for Hello {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        writeln!(f, "Hello, {}!👋", self.name)
     }
 }
 
-//Rust > 1.31 #[allow(clippy::needless_pass_by_value)]
-pub fn baka(info: Path<Info>) -> Result<String> {
-    if info.name.is_empty() {
-        Ok(String::from(
-            "Usage: /baka/<name>\nExample: /baka/Onii-chan - Onii-chan's a baka! 😤",
-        ))
-    } else {
-        Ok(format!("{}'s a baka!😤", info.name))
+impl Hello {
+    //Rust > 1.31 #[allow(clippy::needless_pass_by_value)]
+    pub fn route(info: Path<Info>) -> Result<String> {
+        Ok(Hello {
+            name: info.into_inner().name,
+        }
+        .to_string())
+    }
+}
+
+#[derive(Serialize)]
+pub struct Baka {
+    name: String,
+}
+
+impl std::fmt::Display for Baka {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        writeln!(f, "{}'s a baka!😤", self.name)
+    }
+}
+impl Baka {
+    //Rust > 1.31 #[allow(clippy::needless_pass_by_value)]
+    pub fn route(info: Path<Info>) -> Result<String> {
+        Ok(Baka {
+            name: info.into_inner().name,
+        }
+        .to_string())
     }
 }

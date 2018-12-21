@@ -17,22 +17,18 @@ pub fn route() -> ::actix_web::App {
     crate::hosts::Hosts::FuzenInfo
         .filter(::actix_web::App::new())
         .resource("/", |r| r.method(http::Method::GET).with(help::help))
-        .resource("/totp", |r| r.method(http::Method::GET).with(totp::totp))
+        .resource("/totp", |r| {
+            r.method(http::Method::GET).with(totp::TOTP::route)
+        })
         .resource("/randomword", |r| {
             r.method(http::Method::GET).with(randomword::randomword)
         })
         .resource("/fractal.png", |r| r.f(fractal::fractal_png))
-        .scope("/hello", |scope| {
-            scope
-                .resource("", |r| r.method(http::Method::GET).with(fun::hello))
-                .resource("/", |r| r.method(http::Method::GET).with(fun::hello))
-                .resource("/{name}", |r| r.method(http::Method::GET).with(fun::hello))
+        .resource("/hello/{name}", |r| {
+            r.method(http::Method::GET).with(fun::Hello::route)
         })
-        .scope("/baka", |scope| {
-            scope
-                .resource("", |r| r.method(http::Method::GET).with(fun::baka))
-                .resource("/", |r| r.method(http::Method::GET).with(fun::baka))
-                .resource("/{name}", |r| r.method(http::Method::GET).with(fun::baka))
+        .resource("/baka/{name}", |r| {
+            r.method(http::Method::GET).with(fun::Baka::route)
         })
         .resource("/favicon.ico", |r| r.f(favicon))
         .scope("/help", |scope| {

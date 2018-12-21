@@ -1,4 +1,4 @@
-use actix_web::pred;
+use actix_web::{http::NormalizePath, middleware, pred, App};
 #[derive(Copy, Clone, Debug)]
 pub enum Hosts {
     FuzenInfo,
@@ -13,9 +13,10 @@ pub enum HostError {
 }
 
 impl Hosts {
-    pub fn filter(self, app: actix_web::App) -> actix_web::App {
+    pub fn filter(self, app: App) -> actix_web::App {
         app.filter(self.create_pred())
-            .middleware(::actix_web::middleware::Logger::default())
+            .middleware(middleware::Logger::default())
+            .default_resource(|r| r.h(NormalizePath::default()))
     }
     pub fn create_pred<S: 'static>(self) -> pred::AnyPredicate<S> {
         match self {
@@ -32,7 +33,7 @@ impl Hosts {
     }
 }
 
-impl std::convert::Into<::actix_web::App> for Hosts {
+impl std::convert::Into<App> for Hosts {
     fn into(self) -> actix_web::App {
         self.filter(::actix_web::App::new())
     }

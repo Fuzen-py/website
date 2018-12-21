@@ -22,8 +22,19 @@ fn default_period() -> u32 {
     30
 }
 
+#[derive(Serialize)]
+pub struct TOTPCode {
+    code: String,
+}
+
+impl std::fmt::Display for TOTPCode {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        f.write_str(&self.code)
+    }
+}
+
 impl TOTP {
-    pub(crate) fn gen(self) -> Result<String, boringauth::oath::ErrorCode> {
+    fn gen(self) -> Result<TOTPCode, boringauth::oath::ErrorCode> {
         Ok(::boringauth::oath::TOTPBuilder::new()
             .base32_key(&self.token)
             .period(self.period)
@@ -32,11 +43,12 @@ impl TOTP {
             .output_len(self.length)
             .finalize()?
             .generate())
+        .and_then(|code| Ok(TOTPCode { code }))
     }
-}
-
-pub fn totp(form: actix_web::Query<TOTP>) -> String {
-    form.into_inner()
-        .gen()
-        .unwrap_or_else(|_| String::from("Error"))
+    pub fn route(form: actix_web::Query<Self>) -> String {
+        form.into_inner()
+            .gen()
+            .and_then(|code| Ok(code.to_string()))
+            .unwrap_or_else(|_| String::from("Error"))
+    }
 }
