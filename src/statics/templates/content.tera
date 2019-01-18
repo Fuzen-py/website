@@ -1,0 +1,9 @@
+{% extends "base" %}
+{% block body %}
+    <div class="content">{% block content %}{% endblock content %}</div>
+    <div class="nav">
+        <a href="mailto:fuzen@protonmail.com">&#xe635; Contact</a>
+        <span> | </span>
+        <a href="https://github.com/Fuzen-py">&#xe608; Github</a>
+    </div>
+{% endblock body %}

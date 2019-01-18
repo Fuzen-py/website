@@ -1,3 +1,6 @@
+html {
+  max-width: 100vw;
+}
 body {
     background-color: #1d2021;
     display: flex;
@@ -109,8 +112,27 @@ body {
     background-color: #3C3836;
     
   }
-/*
-  .hidden {
-    display: none !important;
-  }
-*/
+#login {
+  width: 50%;
+  margin-top: 25vh;
+  min-height: 50vh;
+  justify-content: center;
+  align-items: center;
+  color: #fbf1c7;
+}
+
+#login>a {
+  display: flex;
+  font-size: 6vw;
+  padding: 2vw;
+  background-color: #458588;
+  border-radius: 1vw;
+}
+
+#login>p {
+  font-size: 2vw;
+}
+
+.hidden {
+  display: none;
+}

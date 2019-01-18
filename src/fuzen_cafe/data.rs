@@ -28,3 +28,30 @@ lazy_static! {
             }).collect()
     };
 }
+
+// http://discordapp.com/api/users/@me
+// Bearer <TOKEN>
+#[derive(Serialize, Deserialize, Debug)]
+pub struct DiscordInfo {
+    pub username: String,
+    pub discriminator: String,
+    pub mfa_enabled: bool,
+    pub id: String,
+    pub avatar: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Token {
+    pub token: String,
+    pub expiration: std::time::SystemTime,
+}
+
+impl Token {
+    pub fn discord_info(&self) -> ::std::result::Result<DiscordInfo, failure::Error> {
+        let mut res = reqwest::Client::new()
+            .get("http://discordapp.com/api/users/@me")
+            .header("Authorization", format!("Bearer {}", self.token))
+            .send()?;
+        Ok(res.json()?)
+    }
+}

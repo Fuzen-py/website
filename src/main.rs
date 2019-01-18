@@ -19,6 +19,7 @@ mod fuzen_cafe;
 mod fuzen_info;
 mod hosts;
 mod statics;
+
 fn main() {
     pretty_env_logger::init();
     let addr: String =

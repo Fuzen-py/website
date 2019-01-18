@@ -1,4 +1,4 @@
-{% extends "base" %}
+{% extends "content" %}
 {% block title %}Projects{% endblock title %}
 {% block content %}
 

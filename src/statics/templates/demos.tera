@@ -1,4 +1,4 @@
-{% extends "base" %}
+{% extends "content" %}
 {% block title %}Demos{% endblock title %}
 {% block content %}
     <div class="hack projects">

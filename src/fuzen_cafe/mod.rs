@@ -1,13 +1,28 @@
 mod data;
-use actix_web::{HttpRequest, HttpResponse, Result};
+mod users;
+
+// TODO: /login - login with discord
+// TODO: /login?<TOKEN> - Show user info & signout button
+// TODO: /wordgame - Store score in session cookie
+// TODO: ADD Color Clock
+// TODO: Implement games from https://gitlab.com/Fuzen-py/Games-rs
+
+use actix_web::{
+    middleware::session::{CookieSessionBackend, SessionStorage},
+    HttpRequest, HttpResponse, Result,
+};
+
 lazy_static! {
     pub static ref TERA: ::tera::Tera = {
         let mut tera = ::tera::Tera::default();
         tera.add_raw_templates(vec![
             ("base", crate::statics::templates::BASE_TERA),
+            ("content", crate::statics::templates::CONTENT_TERA),
             ("demos", crate::statics::templates::DEMOS_TERA),
             ("index", crate::statics::templates::INDEX_TERA),
             ("projects", crate::statics::templates::PROJECTS_TERA),
+            ("login", crate::statics::templates::LOGIN_TERA),
+            ("profile", crate::statics::templates::PROFILE_TERA),
         ])
         .expect("Failed to render templates");
         tera
@@ -26,6 +41,10 @@ pub fn route() -> ::actix_web::App {
         .resource("/wordgame", |r| r.f(wordgame_main))
         .resource("/static/wordgame/main.css", |r| r.f(wordgame_css))
         .resource("/static/wordgame/main.js", |r| r.f(wordgame_js))
+        .resource("/profile", |r| r.f(users::profile))
+        .middleware(SessionStorage::new(
+            CookieSessionBackend::private(&[0; 32]).secure(true),
+        ))
 }
 
 fn index(_: &HttpRequest) -> Result<HttpResponse> {

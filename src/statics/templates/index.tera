@@ -1,4 +1,4 @@
-{% extends "base" %}
+{% extends "content" %}
 {% block js %}
 <script type="text/javascript" src="/static/scripts/index.js"></script>
 {% endblock js %}

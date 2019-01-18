@@ -1,0 +1,13 @@
+{% extends "base" %}
+{% block title %}Login{% endblock title %}
+{% block body %}
+    {% if error %}
+        <div style="background-color: #cc241d; width: 100vw;">
+        <p style="text-align: center; font-size:2vw;">{{ error }}</p>
+    </div>
+    {% endif %}
+    <div class="content" id="login">
+        <a href="https://fuzen.info/discord">Login through Discord</a>
+        <p>Only your discord ID will be stored.</p>
+    </div>
+{% endblock body %}

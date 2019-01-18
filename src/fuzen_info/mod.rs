@@ -1,8 +1,10 @@
+mod discord;
 mod fractal;
 mod fun;
 mod help;
 mod randomword;
 mod totp;
+pub use self::discord::discord_is_configured;
 use actix_web::{http, HttpRequest, HttpResponse};
 
 fn favicon(_req: &HttpRequest) -> HttpResponse {
@@ -36,6 +38,12 @@ pub fn route() -> ::actix_web::App {
                 .resource("", |r| r.method(http::Method::GET).with(help::help))
                 .resource("/", |r| r.method(http::Method::GET).with(help::help))
                 .resource("/{route}", |r| r.method(http::Method::GET).with(help::help))
+        })
+        .resource("/discord", |r| {
+            r.method(http::Method::GET).f(discord::login)
+        })
+        .resource("/discord", |r| {
+            r.method(http::Method::POST).with(discord::callback)
         })
         .middleware(actix_web::middleware::cors::Cors::default())
 }
