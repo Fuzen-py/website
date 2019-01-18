@@ -7,17 +7,25 @@ pub fn profile(req: &HttpRequest) -> HttpResponse {
         debug!("Discord not configured");
         return HttpResponse::NotFound().finish();
     }
+    let id: String = data::get_discord_client().unwrap().0;
+    let link_ = req
+        .url_for(
+            "discord_authorize",
+            &[id, String::from(data::DISCORD_FUZENCAFE_REDIRECT_URI)],
+        )
+        .unwrap();
+    let link = link_.as_str();
     let query = req.query();
     let token: Option<data::Token> = {
         if let Some(ref action) = query.get("action").and_then(|a| Some(a.to_lowercase())) {
             match action.as_str() {
-                "login" | "logout" => return render_login(None),
+                "login" | "logout" => return render_login(&link, None),
                 _ => None,
             }
         } else if let Some(token) = query.get("code").and_then(data::ResultToken::fetch) {
             let t = token.into();
             if req.session().set("token", &t).is_err() {
-                return render_login(Some("internal server error"));
+                return render_login(&link, Some("internal server error"));
             }
             Some(t)
         } else {
@@ -26,22 +34,23 @@ pub fn profile(req: &HttpRequest) -> HttpResponse {
     };
     if let Some(token) = token {
         if token.expired() {
-            render_login(Some("Session is expired"))
-        } else if let Ok(ref discord) = token.discord_info() {
-            render_profile(discord)
+            render_login(&link, Some("Session is expired"))
+        } else if let Ok(discord) = token.discord_info() {
+            render_profile(&discord)
         } else {
-            render_login(Some("Invalid Session"))
+            render_login(&link, Some("Invalid Session"))
         }
     } else {
-        render_login(None)
+        render_login(&link, None)
     }
 }
 
-fn render_login(error: Option<&'static str>) -> HttpResponse {
+fn render_login(link: &str, error: Option<&'static str>) -> HttpResponse {
     let mut context = ::tera::Context::default();
     if let Some(ref error) = error {
         context.insert("error", error);
     }
+    context.insert("login_link", link);
     if let Ok(html) = TERA.render("login", &context) {
         HttpResponse::Ok().content_type("text/html").body(html)
     } else {

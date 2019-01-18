@@ -1,4 +1,4 @@
-static DISCORD_FUZENCAFE_REDIRECT_URI: &str = "https%3A%2F%2Ffuzen.cafe%2Fprofile";
+pub static DISCORD_FUZENCAFE_REDIRECT_URI: &str = "https%3A%2F%2Ffuzen.cafe%2Fprofile";
 use std::ops::Add;
 
 lazy_static! {
@@ -7,7 +7,7 @@ lazy_static! {
         std::env::var("DISCORD_CLIENT_SECRET").ok();
 }
 
-fn get_discord_client() -> ::std::result::Result<(String, String), failure::Error> {
+pub(crate) fn get_discord_client() -> ::std::result::Result<(String, String), failure::Error> {
     Ok((
         std::env::var("DISCORD_CLIENT_ID")?,
         std::env::var("DISCORD_CLIENT_SECRET")?,
@@ -120,8 +120,10 @@ pub struct Token {
 impl Token {
     pub fn discord_info(&self) -> ::std::result::Result<DiscordInfo, failure::Error> {
         let mut res = reqwest::Client::new()
-            .get("http://discordapp.com/api/users/@me")
+            .get("https://discordapp.com/api/users/@me")
             .header("Authorization", format!("Bearer {}", self.token))
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .body("")
             .send()?;
         Ok(res.json()?)
     }

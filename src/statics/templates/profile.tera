@@ -6,7 +6,7 @@
             <img src="https://cdn.discordapp.com/avatars/{{ discord.id }}/{{ discord.avatar }}.png" class="circle_image">
             <span class="line"></span>
         </div>
-        <p class="hack" id="{{ discord.discriminator }}">{{ discord.usernamename }}</p>
+        <p class="hack" id="{{ discord.discriminator }}">{{ discord.username }}</p>
         <p class="hack">Hugs: 200<br>Balance: 0</p>
         <h2 class="hack hidden">Scores:</h2>
         <p class="hack hidden"><strong>WordGame: </strong> 0</b></p>

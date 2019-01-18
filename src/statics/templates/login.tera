@@ -7,7 +7,7 @@
     </div>
     {% endif %}
     <div class="content" id="login">
-        <a href="https://fuzen.cafe/profile?action=login">Login through Discord</a>
+        <a href="{{ login_link }}">Login through Discord</a>
         <p>Only your discord ID will be stored.</p>
     </div>
 {% endblock body %}
