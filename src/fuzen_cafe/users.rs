@@ -3,46 +3,34 @@ use actix_web::{middleware::session::RequestSession, HttpRequest, HttpResponse};
 
 // TODO: Optimize this
 pub fn profile(req: &HttpRequest) -> HttpResponse {
-    if !crate::fuzen_info::discord_is_configured() {
-        println!("Discord not configured");
+    if !data::discord_is_configured() {
+        debug!("Discord not configured");
         return HttpResponse::NotFound().finish();
     }
     let query = req.query();
-    let token = query.get("token");
-    let expires = query.get("expires").and_then(|e| e.parse::<u64>().ok());
-    if token.is_some() & expires.is_some() {
-        let token = token.unwrap();
-        let expiration = ::std::time::UNIX_EPOCH + std::time::Duration::from_secs(expires.unwrap());
-        let token = data::Token {
-            token: token.to_owned(),
-            expiration,
-        };
-        if let Ok(ref discord) = token.discord_info() {
-            req.session().set("token", token).is_ok(); // TODO: Handle Error
-            req.session().set("expiration", expiration).is_ok(); // TODO: Handle Error
-            return render_profile(discord);
-        }
-    }
-    let token = req.session().get::<String>("token").unwrap_or(None);
-    let expiration = req
-        .session()
-        .get::<::std::time::SystemTime>("token")
-        .unwrap_or(None);
-    if token.is_some() & expiration.is_some() {
-        let token = data::Token {
-            token: token.unwrap(),
-            expiration: expiration.unwrap(),
-        };
-        if token.expiration <= ::std::time::UNIX_EPOCH {
-            render_login(Some("Session Expired"))
-        } else if let Ok(ref discord) = token.discord_info() {
-            if discord.id == "134090963395149824" {
-                render_profile(discord)
-            } else {
-                render_login(Some("Not allowed"))
+    let token: Option<data::Token> = {
+        if let Some(ref action) = query.get("action").and_then(|a| Some(a.to_lowercase())) {
+            match action.as_str() {
+                "login" | "logout" => return render_login(None),
+                _ => None,
             }
+        } else if let Some(token) = query.get("code").and_then(data::ResultToken::fetch) {
+            let t = token.into();
+            if req.session().set("token", &t).is_err() {
+                return render_login(Some("internal server error"));
+            }
+            Some(t)
         } else {
-            render_login(Some("Invalid Login"))
+            req.session().get::<data::Token>("token").unwrap_or(None)
+        }
+    };
+    if let Some(token) = token {
+        if token.expired() {
+            render_login(Some("Session is expired"))
+        } else if let Ok(ref discord) = token.discord_info() {
+            render_profile(discord)
+        } else {
+            render_login(Some("Invalid Session"))
         }
     } else {
         render_login(None)
@@ -70,3 +58,7 @@ fn render_profile(discord: &data::DiscordInfo) -> HttpResponse {
         HttpResponse::NotFound().finish()
     }
 }
+
+// TODO: Add refresh token
+
+// IDEA: Implement this as part of the account creation process instead of just login

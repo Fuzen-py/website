@@ -42,6 +42,8 @@ pub fn route() -> ::actix_web::App {
         .resource("/static/wordgame/main.css", |r| r.f(wordgame_css))
         .resource("/static/wordgame/main.js", |r| r.f(wordgame_js))
         .resource("/profile", |r| r.f(users::profile))
+        .external_resource("discord_authorize", "https://discordapp.com/api/oauth2/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code&scope=identify")
+        .external_resource("discord_token", "https://discordapp.com/api/oauth2/token?grant_type=authorization_code&code={code}&redirect_uri={redirect_uri}")
         .middleware(SessionStorage::new(
             CookieSessionBackend::private(&[0; 32]).secure(true),
         ))

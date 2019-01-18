@@ -12,5 +12,5 @@
         <p class="hack hidden"><strong>WordGame: </strong> 0</b></p>
 
     </div>
-    <a href="/login?action=logout">Logout</a>
+    <a href="https://fuzen.cafe/profile?action=logout">Logout</a>
 {% endblock body %}

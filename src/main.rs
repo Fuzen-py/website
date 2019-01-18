@@ -4,6 +4,8 @@ extern crate failure;
 extern crate serde_derive;
 #[macro_use]
 extern crate lazy_static;
+#[macro_use]
+extern crate log;
 extern crate actix_web; //Rust > 1.31
 extern crate boringauth; //Rust > 1.31
 extern crate chrono; //Rust > 1.31
