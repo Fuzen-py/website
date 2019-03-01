@@ -12,13 +12,13 @@ pub struct TOTP {
 }
 
 fn default_base() -> Vec<u8> {
-    [48, 49, 50, 51, 52, 53, 54, 55, 56, 57].to_vec()
+    vec![48, 49, 50, 51, 52, 53, 54, 55, 56, 57]
 }
-fn default_len() -> usize {
+const fn default_len() -> usize {
     6
 }
 
-fn default_period() -> u32 {
+const fn default_period() -> u32 {
     30
 }
 

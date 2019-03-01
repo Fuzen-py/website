@@ -14,7 +14,7 @@ pub struct RandomWordQuery {
     count: usize,
 }
 
-fn default_count() -> usize {
+const fn default_count() -> usize {
     1
 }
 

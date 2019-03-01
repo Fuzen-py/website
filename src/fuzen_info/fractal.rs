@@ -12,10 +12,7 @@ struct FractalCore;
 impl FractalCore {
     pub fn get_cords(width: u64, position: u64) -> (u64, u64) {
         let p = position + 1;
-        (
-            (p as f32 / width as f32).floor() as u64,
-            (p % width) + width,
-        )
+        ((p as f32 / width as f32) as u64, (p % width) + width)
     }
     //Rust > 1.31 #[allow(clippy::many_single_char_names)]
     pub fn math_closure(width: u64, height: u64) -> impl Fn(usize) -> u8 {
@@ -80,7 +77,7 @@ impl FractalSync {
         }
     }
     #[allow(unused)]
-    fn dimentions(&self) -> (usize, usize) {
+    const fn dimentions(&self) -> (usize, usize) {
         (self.width, self.height)
     }
 }
