@@ -1,10 +1,10 @@
-use actix_web::{Path, Result};
+use actix_web::{web, Result};
 
-#[derive(Deserialize)]
+#[derive(serde::Deserialize)]
 pub struct Info {
     name: String,
 }
-#[derive(Serialize)]
+#[derive(serde::Serialize)]
 pub struct Hello {
     pub name: String,
 }
@@ -16,16 +16,15 @@ impl std::fmt::Display for Hello {
 }
 
 impl Hello {
-    //Rust > 1.31 #[allow(clippy::needless_pass_by_value)]
-    pub fn route(info: Path<Info>) -> Result<String> {
+    pub fn route(info: web::Path<Info>) -> Result<String> {
         Ok(Hello {
-            name: info.into_inner().name,
+            name: info.name.clone(),
         }
         .to_string())
     }
 }
 
-#[derive(Serialize)]
+#[derive(serde::Serialize)]
 pub struct Baka {
     name: String,
 }
@@ -36,10 +35,9 @@ impl std::fmt::Display for Baka {
     }
 }
 impl Baka {
-    //Rust > 1.31 #[allow(clippy::needless_pass_by_value)]
-    pub fn route(info: Path<Info>) -> Result<String> {
+    pub fn route(info: web::Path<Info>) -> Result<String> {
         Ok(Baka {
-            name: info.into_inner().name,
+            name: info.name.clone(),
         }
         .to_string())
     }

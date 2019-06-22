@@ -2,7 +2,7 @@ use rand::prelude::SliceRandom;
 use rayon::prelude::*;
 static RAND_WORDS: &str = include_str!("words.txt");
 
-#[derive(Deserialize, Copy, Clone)]
+#[derive(serde::Deserialize, Copy, Clone)]
 pub struct RandomWordQuery {
     #[serde(default)]
     min: usize,
@@ -47,7 +47,7 @@ impl RandomWordQuery {
     }
 }
 
-#[derive(Serialize)]
+#[derive(serde::Serialize)]
 struct RandomWord {
     words: Vec<String>,
 }
@@ -58,6 +58,6 @@ impl std::fmt::Display for RandomWord {
     }
 }
 
-pub fn randomword(query: ::actix_web::Query<RandomWordQuery>) -> String {
+pub fn randomword(query: ::actix_web::web::Query<RandomWordQuery>) -> String {
     query.into_inner().gen().to_string()
 }

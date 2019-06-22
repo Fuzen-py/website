@@ -6,8 +6,6 @@ const DEFAULT_IMG_X: usize = 700;
 const DEFAULT_IMG_Y: usize = 700;
 const MAX_ITERATIONS: u16 = 256;
 
-pub type Result<T> = ::std::result::Result<T, failure::Error>;
-
 struct FractalCore;
 impl FractalCore {
     pub fn get_cords(width: u64, position: u64) -> (u64, u64) {
@@ -109,7 +107,7 @@ impl Iterator for FractalSync {
     }
 }
 
-pub fn fractal_png(_req: &::actix_web::HttpRequest) -> Result<::actix_web::HttpResponse> {
+pub fn fractal_png() -> actix_web::Result<::actix_web::HttpResponse> {
     let imgx: usize = match std::env::var("FRACTAL_RES_X") {
         Ok(val) => match val.parse() {
             Ok(x) => x,
@@ -129,7 +127,9 @@ pub fn fractal_png(_req: &::actix_web::HttpRequest) -> Result<::actix_web::HttpR
     imgbuf.swap_with_slice(&mut pre_process);
     // Return the image without saving to disk
     let mut png_buf = Vec::with_capacity((imgx * imgy) as usize);
-    image::ImageLuma8(imgbuf).write_to(&mut png_buf, image::PNG)?;
+    image::ImageLuma8(imgbuf)
+        .write_to(&mut png_buf, image::PNG)
+        .map_err(|_| std::io::Error::new(std::io::ErrorKind::Other, "Failed to process image"))?;
     Ok(::actix_web::HttpResponse::Ok()
         .content_type("image/png")
         .body(png_buf))

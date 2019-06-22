@@ -1,5 +1,5 @@
 #![deny(unused)]
-use actix_web::{Path, Result};
+use actix_web::{web, Result};
 
 mod baka;
 mod fractal;
@@ -9,7 +9,7 @@ mod randomword;
 mod totp;
 
 /// Help Structure
-#[derive(Serialize)]
+#[derive(serde::Serialize)]
 pub struct Help {
     /// Description of the entry
     pub description: &'static str,
@@ -61,13 +61,13 @@ impl std::fmt::Display for Help {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(serde::Deserialize)]
 pub struct Info {
     #[serde(default)]
     route: String,
 }
 
-pub fn help(info: Path<Info>) -> Result<String> {
+pub fn help(info: web::Path<Info>) -> Result<String> {
     let route = info.route.to_ascii_lowercase();
     Ok(match route.as_str() {
         "baka" => baka::help(),

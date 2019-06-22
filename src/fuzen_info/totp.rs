@@ -1,4 +1,4 @@
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, serde::Deserialize)]
 pub struct TOTP {
     pub(crate) token: String,
     #[serde(default)]
@@ -22,7 +22,7 @@ const fn default_period() -> u32 {
     30
 }
 
-#[derive(Serialize)]
+#[derive(serde::Serialize)]
 pub struct TOTPCode {
     code: String,
 }
@@ -45,7 +45,7 @@ impl TOTP {
             .generate())
         .and_then(|code| Ok(TOTPCode { code }))
     }
-    pub fn route(form: actix_web::Query<Self>) -> String {
+    pub fn route(form: actix_web::web::Query<Self>) -> String {
         form.into_inner()
             .gen()
             .and_then(|code| Ok(code.to_string()))

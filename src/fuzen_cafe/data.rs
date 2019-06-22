@@ -1,7 +1,7 @@
 pub static DISCORD_FUZENCAFE_REDIRECT_URI: &str = "https%3A%2F%2Ffuzen.cafe%2Fprofile";
 use std::ops::Add;
 
-lazy_static! {
+lazy_static::lazy_static! {
     pub static ref DISCORD_CLIENT_ID: Option<String> = std::env::var("DISCORD_CLIENT_ID").ok();
     pub static ref DISCORD_CLIENT_SECRET: Option<String> =
         std::env::var("DISCORD_CLIENT_SECRET").ok();
@@ -17,7 +17,7 @@ pub fn discord_is_configured() -> bool {
     get_discord_client().is_ok()
 }
 
-#[derive(Serialize)]
+#[derive(serde::Serialize)]
 pub struct Demo {
     pub name: String,
     pub link: String,
@@ -25,7 +25,7 @@ pub struct Demo {
     pub src: Option<String>,
 }
 
-#[derive(Serialize, Clone)]
+#[derive(serde::Serialize, Clone)]
 pub struct Blog {
     pub uuid: String,
     pub title: String,
@@ -34,8 +34,8 @@ pub struct Blog {
     pub num: usize,
 }
 
-lazy_static! {
-    #[derive(Serialize, Clone)]
+lazy_static::lazy_static! {
+    #[derive(serde::Serialize, Clone)]
     pub static ref DEMO_BLOGS: Vec<Blog> = {
         (0..20).map(|n|
             Blog {
@@ -50,7 +50,7 @@ lazy_static! {
 
 // http://discordapp.com/api/users/@me
 // Bearer <TOKEN>
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct DiscordInfo {
     pub username: String,
     pub discriminator: String,
@@ -59,7 +59,7 @@ pub struct DiscordInfo {
     pub avatar: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct ResultToken {
     access_token: String,
     token_type: String,
@@ -69,13 +69,13 @@ pub struct ResultToken {
 
 impl ResultToken {
     #[allow(clippy::ptr_arg)]
-    pub fn fetch(code: &String) -> Option<Self> {
+    pub fn fetch(code: String) -> Option<Self> {
         let (client_id, client_secret) = get_discord_client().unwrap();
         // https://discordapp.com/api/oauth2/token?grant_type=authorization_code&code={code}&redirect_uri={redirect_uri}
         let uri = String::from(
             "https://discordapp.com/api/oauth2/token?grant_type=client_credentials&code=",
         )
-        .add(code)
+        .add(&code)
         .add("&redirect_uri=")
         .add(DISCORD_FUZENCAFE_REDIRECT_URI)
         .add("&client_id=")
@@ -111,7 +111,7 @@ impl std::convert::Into<Token> for ResultToken {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(serde::Serialize, serde::Deserialize, Debug)]
 pub struct Token {
     pub token: String,
     pub expiration: ::std::time::SystemTime,

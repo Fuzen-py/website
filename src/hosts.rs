@@ -1,48 +1,15 @@
-use actix_web::{http::NormalizePath, middleware, pred, App};
-#[derive(Copy, Clone, Debug)]
+use std::str::FromStr;
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum Hosts {
     FuzenInfo,
     FuzenCafe,
     NekoClaims,
 }
 
-#[derive(Debug, Fail)]
+#[derive(Debug, failure::Fail)]
 pub enum HostError {
     #[fail(display = "Unknown Host: {}", host)]
     UnknownHost { host: String },
-}
-
-impl Hosts {
-    pub fn filter(self, app: App) -> actix_web::App {
-        app.filter(self.create_pred())
-            .middleware(middleware::Logger::default())
-            .default_resource(|r| r.h(NormalizePath::default()))
-    }
-    pub fn create_pred<S: 'static>(self) -> pred::AnyPredicate<S> {
-        match self {
-            Hosts::FuzenInfo => {
-                pred::Any(pred::Host("fuzen.info")).or(pred::Host("test.fuzen.info"))
-            }
-            Hosts::FuzenCafe => {
-                pred::Any(pred::Host("fuzen.cafe")).or(pred::Host("test.fuzen.cafe"))
-            }
-            Hosts::NekoClaims => {
-                pred::Any(pred::Host("neko.claims")).or(pred::Host("test.neko.claims"))
-            }
-        }
-    }
-}
-
-impl std::convert::Into<App> for Hosts {
-    fn into(self) -> actix_web::App {
-        self.filter(::actix_web::App::new())
-    }
-}
-
-impl<S: 'static> std::convert::Into<pred::AnyPredicate<S>> for Hosts {
-    fn into(self) -> pred::AnyPredicate<S> {
-        self.create_pred()
-    }
 }
 
 impl std::fmt::Display for Hosts {
@@ -51,7 +18,7 @@ impl std::fmt::Display for Hosts {
     }
 }
 
-impl std::str::FromStr for Hosts {
+impl FromStr for Hosts {
     type Err = HostError;
     fn from_str(s: &str) -> Result<Hosts, HostError> {
         match s {
@@ -72,5 +39,23 @@ impl std::convert::AsRef<str> for Hosts {
             Hosts::FuzenInfo => "fuzen.info",
             Hosts::NekoClaims => "neko.claims",
         }
+    }
+}
+
+impl actix_web::guard::Guard for Hosts {
+    fn check(&self, request: &actix_web::dev::RequestHead) -> bool {
+        request
+            .headers
+            .get("HOST")
+            .and_then(|host| host.to_str().ok())
+            .and_then(|host| Hosts::from_str(&host).ok())
+            .and_then(|host| Some(host == *self))
+            .unwrap_or(false)
+    }
+}
+
+impl std::convert::Into<String> for Hosts {
+    fn into(self) -> String {
+        self.to_string()
     }
 }
