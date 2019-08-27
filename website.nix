@@ -11,7 +11,7 @@ buildRustPackage rec {
 
 	src = ./.;
 	# Change this when it error's
-	cargoSha256 = "1r0y0drq229bf762nawdy41pdhlih3zdi3klrwmkb546ql4jd32a";
+	cargoSha256 = "0m3mf785zzpdq2s7fjsyaxnj2ps86q9ry5c4hh0i4jngc85slwh6";
 
 	meta = with stdenv.lib; {
 		description = "Fuzen's websites";
